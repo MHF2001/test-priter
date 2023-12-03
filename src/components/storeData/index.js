@@ -27,3 +27,16 @@ export const getData = async () => {
     console.log('====================================');
   }
 };
+
+export const deleteAllData = async () => {
+  try {
+    await AsyncStorage.clear();
+  } catch (e) {
+    // clear error
+    console.log('====================================');
+    console.log(`Error while delete Data: ${e}`);
+    console.log('====================================');
+  }
+
+  console.log('Done.');
+};

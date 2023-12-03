@@ -1,12 +1,16 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {usePrintersDiscovery} from 'react-native-esc-pos-printer';
 import ThermalPrinterModule from 'react-native-thermal-printer';
 import {Button} from '../components/Button';
 import {PrintersList} from '../components/PrintersList';
-import {getData, storeData} from '../components/storeData';
+import {storeData} from '../components/storeData';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SelectDropdown from 'react-native-select-dropdown';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useDispatch} from 'react-redux';
+import {printersArray, addPrinter} from '../redux/printersReducers';
 
 const Discovery = () => {
   const {start, printerError, isDiscovering, printers} = usePrintersDiscovery();
@@ -14,6 +18,14 @@ const Discovery = () => {
 
   const [printerBluetoothData, setPrinterBluetoothData] = useState([]);
   const [selectedPrinters, setSelectedPrinters] = useState([]);
+  const [printersSelect, setPrintersSelect] = useState([
+    'Main Printer',
+    'Printer 1',
+    'Printer 2',
+  ]);
+
+  const [selected, setSelected] = useState('');
+  const dispatch = useDispatch();
 
   const handelSetPrinterData = async () => {
     // Start search wifi printers
@@ -27,22 +39,22 @@ const Discovery = () => {
   };
 
   const handelSelectPrinter = printer => {
-    setSelectedPrinters([...selectedPrinters, printer]);
+    setSelectedPrinters([
+      ...selectedPrinters,
+      {...printer, ...{printer: selected}},
+    ]);
   };
 
   const handleSaveData = () => {
     storeData(selectedPrinters);
-
-    if (getData()) {
-      navigation.navigate('PrinterInformation', {data: selectedPrinters});
-    }
+    dispatch(printersArray(selectedPrinters));
+    navigation.navigate('PrinterInformation');
   };
 
   const checkData = async () => {
     const value = await AsyncStorage.getItem('printer');
     const parseValue = JSON.parse(value);
     if (parseValue) {
-      console.log({parseValue});
       navigation.navigate('PrinterInformation', {data: parseValue});
     }
   };
@@ -51,39 +63,52 @@ const Discovery = () => {
     checkData();
   }, []);
   return (
-    <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        <PrintersList
-          onPress={printer => {
-            if (printer) {
-              handelSelectPrinter(printer);
-            }
-          }}
-          printers={[...printers, ...printerBluetoothData]}
-        />
-      </View>
-      <View style={styles.contentContainer}>
-        {selectedPrinters?.length > 0 ? (
-          <Button
-            loading={isDiscovering}
-            title="Next"
-            onPress={() => handleSaveData()}
-            style={styles.text}
+    <SafeAreaView style={styles.saveAreaViewContainer}>
+      <View style={styles.container}>
+        <View>
+          <SelectDropdown
+            data={printersSelect}
+            onSelect={(selectedItem, index) => {
+              setSelected(selectedItem);
+            }}
           />
-        ) : (
-          <Button
-            loading={isDiscovering}
-            title="Search"
-            onPress={() => handelSetPrinterData()}
-            style={styles.text}
-          />
-        )}
+        </View>
+        <ScrollView>
+          <View style={styles.contentContainer}>
+            <PrintersList
+              onPress={printer => {
+                if (printer) {
+                  handelSelectPrinter(printer);
+                }
+              }}
+              printers={[...printers, ...printerBluetoothData]}
+            />
+          </View>
+        </ScrollView>
+        <View style={styles.contentContainer}>
+          {selectedPrinters?.length > 0 ? (
+            <Button
+              loading={isDiscovering}
+              title="Next"
+              onPress={() => handleSaveData()}
+              style={styles.text}
+            />
+          ) : (
+            <Button
+              loading={isDiscovering}
+              title="Search"
+              onPress={() => handelSetPrinterData()}
+              style={styles.text}
+            />
+          )}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  saveAreaViewContainer: {flex: 1, backgroundColor: '#FFF'},
   container: {
     flex: 1,
     backgroundColor: '#fcf9f9',
