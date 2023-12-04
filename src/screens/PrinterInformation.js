@@ -13,7 +13,6 @@ import ThermalPrinterModule from 'react-native-thermal-printer';
 import {useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import RNRestart from 'react-native-restart';
-import ThermalPrinterModuleTow from 'react-native-thermal-printer';
 
 const PrinterInformation = () => {
   const [printing, setPrinting] = useState(false);
@@ -66,34 +65,20 @@ const PrinterInformation = () => {
       '[L]\n' +
       '[L]\n';
 
-    // ThermalPrinterModule.printTcp({
-    //   ip: '192.168.1.173',
-    //   payload: text,
-    // }),
-    await ThermalPrinterModule.getBluetoothDeviceList();
-    await ThermalPrinterModuleTow.getBluetoothDeviceList();
-    await ThermalPrinterModuleTow.printBluetooth({
-      payload: text2,
-      macAddress: '44:09:32:29:34:28',
+    state?.forEach(async element => {
+      if (element?.ipAddress) {
+        await ThermalPrinterModule.printTcp({
+          ip: element?.ipAddress,
+          payload: element.printer === 'Printer 1' ? text2 : text,
+        });
+      } else {
+        await ThermalPrinterModule.getBluetoothDeviceList();
+        await ThermalPrinterModule.printBluetooth({
+          payload: element.printer === 'Printer 1' ? text2 : text,
+          macAddress: element.macAddress,
+        });
+      }
     });
-    await ThermalPrinterModule.printBluetooth({
-      payload: text2,
-      macAddress: '4B:63:13:3D:1C:41',
-    });
-    // state?.forEach(async element => {
-    //   if (element?.ipAddress) {
-    //     await ThermalPrinterModule.printTcp({
-    //       ip: element?.ipAddress,
-    //       payload: element.printer === 'Printer 1' ? text2 : text,
-    //     });
-    //   } else {
-    //     await ThermalPrinterModule.getBluetoothDeviceList();
-    //     await ThermalPrinterModule.printBluetooth({
-    //       payload: element.printer === 'Printer 1' ? text2 : text,
-    //       macAddress: element.macAddress,
-    //     });
-    //   }
-    // });
     setPrinting(false);
   };
 
