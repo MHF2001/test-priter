@@ -20,11 +20,10 @@ const PrinterInformation = () => {
   const state = useSelector(state => state.printerReducers);
 
   const printSimpleReceipt = async () => {
-
     setPrinting(true);
 
     const text =
-      '[C]<img>https://c8.alamy.com/comp/2RBE3KC/person-taking-picture-by-reflex-camera-man-with-black-photo-camera-in-warm-summer-day-2RBE3KC.jpg</img>\n' +
+      // '[C]<img>https://c8.alamy.com/comp/2RBE3KC/person-taking-picture-by-reflex-camera-man-with-black-photo-camera-in-warm-summer-day-2RBE3KC.jpg</img>\n' +
       '[L]\n' +
       "[C]<u><font size='big'>ORDER N°045</font></u>\n" +
       '[L]\n' +
@@ -55,27 +54,21 @@ const PrinterInformation = () => {
       '[L]\n';
 
     const text2 =
-      '[C]<img>https://c8.alamy.com/comp/2RBE3KC/person-taking-picture-by-reflex-camera-man-with-black-photo-camera-in-warm-summer-day-2RBE3KC.jpg</img>\n' +
-      '[L]\n' +
-      "[C]<u><font size='big'> Kitchen 045</font></u>\n" +
-      '[L]\n' +
-      '[C]================================\n' +
-      "[C]<barcode type='ean13' height='10'>831254784551</barcode>\n" +
-      "[C]<qrcode size='20'>http://www.developpeur-web.dantsu.com/</qrcode>\n" +
+      '[C]<img>https://templatelab.com/wp-content/uploads/2015/08/RESTAURANT_Receipt_Template_Word.png</img>\n' +
       '[L]\n' +
       '[L]\n' +
       '[L]\n';
 
+    await ThermalPrinterModule.printTcp({
+      ip: '192.168.1.113',
+      payload: text2,
+    });
     state?.forEach(async element => {
       if (element?.ipAddress) {
-        await ThermalPrinterModule.printTcp({
-          ip: element?.ipAddress,
-          payload: element.printer === 'Printer 1' ? text2 : text,
-        });
       } else {
         await ThermalPrinterModule.getBluetoothDeviceList();
         await ThermalPrinterModule.printBluetooth({
-          payload: element.printer === 'Printer 1' ? text2 : text,
+          payload: text2,
           macAddress: element.macAddress,
         });
       }
