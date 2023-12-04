@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {usePrintersDiscovery} from 'react-native-esc-pos-printer';
-import ThermalPrinterModule from 'react-native-thermal-printer';
+import {NativeModules} from 'react-native';
 import {Button} from '../components/Button';
 import {PrintersList} from '../components/PrintersList';
 import {storeData} from '../components/storeData';
@@ -33,7 +33,7 @@ const Discovery = () => {
 
     // Get all Bluetooth connected device
     const bluetoothPrinters =
-      await ThermalPrinterModule.getBluetoothDeviceList();
+      await NativeModules.ThermalPrinterModule.getBluetoothDeviceList();
     // Set printer list
     setPrinterBluetoothData(bluetoothPrinters);
   };

@@ -9,10 +9,10 @@ import React, {useState} from 'react';
 import {deleteAllData} from '../components/storeData';
 import PrinterInfo from '../components/PrinterInfo/PrinterInfo';
 import {Button} from '../components/Button';
-import ThermalPrinterModule from 'react-native-thermal-printer';
 import {useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import RNRestart from 'react-native-restart';
+import ThermalPrinterModule from '../components/ThermalPrinterModule';
 
 const PrinterInformation = () => {
   const [printing, setPrinting] = useState(false);
@@ -20,6 +20,7 @@ const PrinterInformation = () => {
   const state = useSelector(state => state.printerReducers);
 
   const printSimpleReceipt = async () => {
+
     setPrinting(true);
 
     const text =
