@@ -86,6 +86,7 @@ public abstract class EscPosPrinterSize {
      * @return Bytes contain the image in ESC/POS command
      */
     public byte[] bitmapToBytes(Bitmap bitmap, boolean gradient) {
+        gradient = false;
         boolean isSizeEdit = false;
         int bitmapWidth = bitmap.getWidth(),
                 bitmapHeight = bitmap.getHeight(),

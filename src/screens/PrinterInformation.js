@@ -60,7 +60,7 @@ const PrinterInformation = () => {
       '[L]\n' +
       '[L]\n';
 
-    await ThermalPrinterModule.printTcp({
+    await ThermalPrinterModule.printBluetooth({
       ip: '192.168.1.113',
       payload: text2,
     });
