@@ -1,4 +1,4 @@
-package com.dantsu.thermalprinter.async;
+package com.nardprinter.async;
 
 import com.dantsu.escposprinter.EscPosPrinterSize;
 import com.dantsu.escposprinter.connection.DeviceConnection;

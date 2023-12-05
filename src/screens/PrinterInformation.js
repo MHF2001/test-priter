@@ -13,6 +13,7 @@ import {useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import RNRestart from 'react-native-restart';
 import ThermalPrinterModule from '../components/ThermalPrinterModule';
+import CaptureHtmlToBitmap from '../components/MyWebView';
 
 const PrinterInformation = () => {
   const [printing, setPrinting] = useState(false);
@@ -23,7 +24,7 @@ const PrinterInformation = () => {
     setPrinting(true);
 
     const text =
-      // '[C]<img>https://c8.alamy.com/comp/2RBE3KC/person-taking-picture-by-reflex-camera-man-with-black-photo-camera-in-warm-summer-day-2RBE3KC.jpg</img>\n' +
+      '[C]<img>https://pngimg.com/d/mario_PNG125.png</img>\n' +
       '[L]\n' +
       "[C]<u><font size='big'>ORDER N°045</font></u>\n" +
       '[L]\n' +
@@ -54,7 +55,7 @@ const PrinterInformation = () => {
       '[L]\n';
 
     const text2 =
-      '[C]<img>https://templatelab.com/wp-content/uploads/2015/08/RESTAURANT_Receipt_Template_Word.png</img>\n' +
+      '[C]<img>https://assets.stickpng.com/images/61d183263a856e0004c6334a.png</img>\n' +
       '[L]\n' +
       '[L]\n' +
       '[L]\n';
@@ -66,11 +67,11 @@ const PrinterInformation = () => {
     state?.forEach(async element => {
       if (element?.ipAddress) {
       } else {
-        await ThermalPrinterModule.getBluetoothDeviceList();
-        await ThermalPrinterModule.printBluetooth({
-          payload: text2,
-          macAddress: element.macAddress,
-        });
+        // await ThermalPrinterModule.getBluetoothDeviceList();
+        // await ThermalPrinterModule.printBluetooth({
+        //   payload: text,
+        //   macAddress: element.macAddress,
+        // });
       }
     });
     setPrinting(false);

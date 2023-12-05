@@ -1,4 +1,4 @@
-package com.dantsu.thermalprinter.async;
+package com.nardprinter.async;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -63,7 +63,7 @@ public abstract class AsyncEscPosPrint extends AsyncTask<AsyncEscPosPrinter, Int
                     printerData.getPrinterDpi(),
                     printerData.getPrinterWidthMM(),
                     printerData.getPrinterNbrCharactersPerLine(),
-                    new EscPosCharsetEncoding("windows-1252", 16)
+                    new EscPosCharsetEncoding("UTF-8", 32)
             );
 
             // printer.useEscAsteriskCommand(true);

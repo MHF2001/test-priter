@@ -11,6 +11,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch} from 'react-redux';
 import {printersArray, addPrinter} from '../redux/printersReducers';
+import CaptureHtmlToBitmap from '../components/MyWebView';
 
 const Discovery = () => {
   const {start, printerError, isDiscovering, printers} = usePrintersDiscovery();
@@ -64,6 +65,7 @@ const Discovery = () => {
   }, []);
   return (
     <SafeAreaView style={styles.saveAreaViewContainer}>
+      {/* <CaptureHtmlToBitmap /> */}
       <View style={styles.container}>
         <View>
           <SelectDropdown

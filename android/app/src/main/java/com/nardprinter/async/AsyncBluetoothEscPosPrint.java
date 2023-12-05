@@ -1,4 +1,4 @@
-package com.dantsu.thermalprinter.async;
+package com.nardprinter.async;
 
 import android.content.Context;
 

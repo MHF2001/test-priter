@@ -1,5 +1,4 @@
 {
-    "cSpell.words": [
-        "Adress"
-    ]
+    "java.compile.nullAnalysis.mode": "disabled",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
