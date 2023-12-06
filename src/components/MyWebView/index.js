@@ -4,14 +4,31 @@ import {WebView} from 'react-native-webview';
 import {captureScreen} from 'react-native-view-shot';
 import ThermalPrinterModule from '../ThermalPrinterModule';
 import {base} from './htmlContant';
-const MyWebView = ({htmlContent, onLoad, onLoadEnd}) => {
+const MyWebView = ({onLoad, onLoadEnd}) => {
   const {height, width, scale, fontScale} = useWindowDimensions();
+
+  // What we we should do The forntend to send the data from URL to the app and the base46
+  /* 
+    const downloadElement = () => {
+    window.ReactNativeWebView.postMessage(state);
+  };
+  */
+  const onMessage = async event => {
+    const userAgent = event.nativeEvent.data;
+    const text2 = `[L]<img>${userAgent}</img>\n`;
+    await ThermalPrinterModule.printBluetooth({
+      ip: '192.168.1.113',
+      payload: text2,
+    });
+  };
 
   return (
     <WebView
-      source={{uri: 'http://192.168.1.20:6520'}}
+      source={{uri: 'http://192.168.1.20:4200'}}
       onLoad={onLoad}
       onLoadEnd={onLoadEnd}
+      javascriptenabled={true}
+      onMessage={onMessage}
       style={{
         height: height,
         width: width,
@@ -35,29 +52,6 @@ const CaptureHtmlToBitmap = () => {
     setWebViewLoaded(true);
   };
 
-  const capture = async () => {
-    // Adding a short delay to ensure the WebView is fully loaded
-    setTimeout(async () => {
-      if (webViewLoaded) {
-        try {
-          const text2 = `[L]<img>${base}</img>\n`;
-          await ThermalPrinterModule.printBluetooth({
-            ip: '192.168.1.113',
-            payload: text2,
-          });
-          // await ThermalPrinterModule.getBluetoothDeviceList();
-          // await ThermalPrinterModule.printBluetooth({
-          //   payload: text2,
-          //   macAddress: '44:09:32:29:34:28',
-          // });
-          // You can save or use the captured image as needed
-        } catch (error) {
-          console.error('Capture error:', error);
-        }
-      }
-    }, 1000); // You can adjust the delay as needed
-  };
-
   return (
     <>
       <View
@@ -65,15 +59,8 @@ const CaptureHtmlToBitmap = () => {
           flex: 1,
           backgroundColor: 'white',
         }}>
-        <MyWebView
-          htmlContent={HTMLCONTANT}
-          ref={webViewRef}
-          onLoad={onLoad}
-          onLoadEnd={onLoadEnd}
-        />
+        <MyWebView ref={webViewRef} onLoad={onLoad} onLoadEnd={onLoadEnd} />
       </View>
-
-      <Button title="Capture" onPress={capture} />
     </>
   );
 };
