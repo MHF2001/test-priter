@@ -12,6 +12,15 @@ const MyWebView = ({onLoad, onLoadEnd}) => {
     const downloadElement = () => {
     window.ReactNativeWebView.postMessage(state);
   };
+
+
+  some style for the HTML in the html element 
+          style={{
+          margin: 0,
+          padding: 0,
+          width: "100%",
+          backgroundColor: "#ffff",
+        }}
   */
   const onMessage = async event => {
     const userAgent = event.nativeEvent.data;
@@ -24,7 +33,7 @@ const MyWebView = ({onLoad, onLoadEnd}) => {
 
   return (
     <WebView
-      source={{uri: 'http://192.168.1.20:4200'}}
+      source={{uri: 'http://192.168.1.20:22558'}}
       onLoad={onLoad}
       onLoadEnd={onLoadEnd}
       javascriptenabled={true}
