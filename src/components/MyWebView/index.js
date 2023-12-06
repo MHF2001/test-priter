@@ -3,13 +3,13 @@ import {View, Button, useWindowDimensions} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {captureScreen} from 'react-native-view-shot';
 import ThermalPrinterModule from '../ThermalPrinterModule';
-import {HTMLCONTANT} from './htmlContant';
+import {base} from './htmlContant';
 const MyWebView = ({htmlContent, onLoad, onLoadEnd}) => {
   const {height, width, scale, fontScale} = useWindowDimensions();
 
   return (
     <WebView
-      source={{html: htmlContent}}
+      source={{uri: 'http://192.168.1.20:6520'}}
       onLoad={onLoad}
       onLoadEnd={onLoadEnd}
       style={{
@@ -40,15 +40,7 @@ const CaptureHtmlToBitmap = () => {
     setTimeout(async () => {
       if (webViewLoaded) {
         try {
-          const result = await captureScreen({
-            format: 'png',
-            quality: 0.8,
-            width: 500,
-            height: 950,
-          });
-
-          console.log('Captured image:', result);
-          const text2 = `[L]<img>${result}</img>\n`;
+          const text2 = `[L]<img>${base}</img>\n`;
           await ThermalPrinterModule.printBluetooth({
             ip: '192.168.1.113',
             payload: text2,

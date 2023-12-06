@@ -10,6 +10,10 @@
     <ProjectReference Include="$(ProjectDir)..\..\node_modules\@react-native-community\checkbox\windows\CheckboxWindows\CheckboxWindows.vcxproj">
       <Project>{eaf81beb-a159-4421-9b6d-e59c37828a57}</Project>
     </ProjectReference>
+    <!-- Projects from react-native-print -->
+    <ProjectReference Include="$(ProjectDir)..\..\node_modules\react-native-print\windows\RNPrint\RNPrint.vcxproj">
+      <Project>{6f9ac236-d97d-4c75-971b-91ac99d7c23b}</Project>
+    </ProjectReference>
     <!-- Projects from react-native-restart -->
     <ProjectReference Include="$(ProjectDir)..\..\node_modules\react-native-restart\windows\ReactNativeRestart\ReactNativeRestart.vcxproj">
       <Project>{d1c46e7e-5f31-46e9-a162-e2e5a8f67e4f}</Project>
