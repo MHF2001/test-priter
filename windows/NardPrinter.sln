@@ -41,8 +41,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReactNativeRestart", "..\no
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RNScreens", "..\node_modules\react-native-screens\windows\RNScreens\RNScreens.vcxproj", "{D638F49E-29D2-4699-AC52-FACD82FA7138}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RNViewShot", "..\node_modules\react-native-view-shot\windows\RNViewShot\RNViewShot.csproj", "{64171807-A036-45AC-84F4-54EB8F6FB1E5}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReactNativeWebView", "..\node_modules\react-native-webview\windows\ReactNativeWebView\ReactNativeWebView.vcxproj", "{00AA3765-C6A0-4713-B3F9-BFE47B9C83F5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ReactNative.Managed", "..\node_modules\react-native-windows\Microsoft.ReactNative.Managed\Microsoft.ReactNative.Managed.csproj", "{F2824844-CE15-4242-9420-308923CD76C3}"

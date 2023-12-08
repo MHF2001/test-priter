@@ -1,20 +1,19 @@
 import React, {useRef, useState} from 'react';
 import {View, Button, useWindowDimensions} from 'react-native';
 import {WebView} from 'react-native-webview';
-import {captureScreen} from 'react-native-view-shot';
 import ThermalPrinterModule from '../ThermalPrinterModule';
 import {base} from './htmlContant';
 const MyWebView = ({onLoad, onLoadEnd}) => {
   const {height, width, scale, fontScale} = useWindowDimensions();
 
   // What we we should do The forntend to send the data from URL to the app and the base46
-  /* 
+  /*
     const downloadElement = () => {
     window.ReactNativeWebView.postMessage(state);
   };
 
 
-  some style for the HTML in the html element 
+  some style for the HTML in the html element
           style={{
           margin: 0,
           padding: 0,
@@ -24,7 +23,7 @@ const MyWebView = ({onLoad, onLoadEnd}) => {
   */
   const onMessage = async event => {
     const userAgent = event.nativeEvent.data;
-    const text2 = `[L]<img>${userAgent}</img>\n`;
+    const text2 = `[L]<img>${base}</img>\n`;
     await ThermalPrinterModule.printBluetooth({
       ip: '192.168.1.113',
       payload: text2,
@@ -61,6 +60,19 @@ const CaptureHtmlToBitmap = () => {
     setWebViewLoaded(true);
   };
 
+  const onMessage = async event => {
+    const userAgent = event.nativeEvent.data;
+    const text2 = `[L]<img>${base}</img>\n`;
+    await ThermalPrinterModule.printTcp({
+      ip: '192.168.1.142',
+      payload: text2,
+    });
+    await ThermalPrinterModule.printBluetooth({
+      ip: '192.168.1.142',
+      payload: text2,
+    });
+  };
+
   return (
     <>
       <View
@@ -68,7 +80,8 @@ const CaptureHtmlToBitmap = () => {
           flex: 1,
           backgroundColor: 'white',
         }}>
-        <MyWebView ref={webViewRef} onLoad={onLoad} onLoadEnd={onLoadEnd} />
+        {/* <MyWebView ref={webViewRef} onLoad={onLoad} onLoadEnd={onLoadEnd} /> */}
+        <Button title="Print" onPress={onMessage} />
       </View>
     </>
   );
