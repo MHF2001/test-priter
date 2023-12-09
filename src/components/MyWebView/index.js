@@ -32,7 +32,7 @@ const MyWebView = ({onLoad, onLoadEnd}) => {
 
   return (
     <WebView
-      source={{uri: 'http://192.168.1.20:22558'}}
+      source={{uri: 'http://dveuebyvaiyfm.cloudfront.net/pos/#/login'}}
       onLoad={onLoad}
       onLoadEnd={onLoadEnd}
       javascriptenabled={true}
@@ -80,7 +80,7 @@ const CaptureHtmlToBitmap = () => {
           flex: 1,
           backgroundColor: 'white',
         }}>
-        {/* <MyWebView ref={webViewRef} onLoad={onLoad} onLoadEnd={onLoadEnd} /> */}
+        <MyWebView ref={webViewRef} onLoad={onLoad} onLoadEnd={onLoadEnd} />
         <Button title="Print" onPress={onMessage} />
       </View>
     </>

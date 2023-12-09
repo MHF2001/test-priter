@@ -11,7 +11,7 @@ import PrinterInfo from '../components/PrinterInfo/PrinterInfo';
 import {Button} from '../components/Button';
 import {useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import RNRestart from 'react-native-restart';
+// import RNRestart from 'react-native-restart';
 import ThermalPrinterModule from '../components/ThermalPrinterModule';
 import CaptureHtmlToBitmap from '../components/MyWebView';
 
@@ -206,7 +206,7 @@ const PrinterInformation = () => {
             <TouchableOpacity
               onPress={() => {
                 deleteAllData();
-                RNRestart.restart();
+                // RNRestart.restart();
               }}>
               <Text
                 style={{
