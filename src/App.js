@@ -14,7 +14,6 @@ const App = () => {
         <PersistGate persistor={persister} loading={null}>
           {/* <RootNavigator /> */}
           <CaptureHtmlToBitmap />
-          {/* <WebView source={{html: 'https://google.com/'}} /> */}
         </PersistGate>
       </ReduxProvider>
     </>

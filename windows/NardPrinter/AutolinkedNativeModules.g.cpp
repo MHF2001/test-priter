@@ -9,6 +9,9 @@
 // Includes from @react-native-community/checkbox
 #include <winrt/CheckboxWindows.h>
 
+// Includes from react-native-print
+#include <winrt/RNPrint.h>
+
 // Includes from react-native-screens
 #include <winrt/RNScreens.h>
 
@@ -24,6 +27,8 @@ void RegisterAutolinkedNativeModulePackages(winrt::Windows::Foundation::Collecti
     packageProviders.Append(winrt::ReactNativeAsyncStorage::ReactPackageProvider());
     // IReactPackageProviders from @react-native-community/checkbox
     packageProviders.Append(winrt::CheckboxWindows::ReactPackageProvider());
+    // IReactPackageProviders from react-native-print
+    packageProviders.Append(winrt::RNPrint::ReactPackageProvider());
     // IReactPackageProviders from react-native-screens
     packageProviders.Append(winrt::RNScreens::ReactPackageProvider());
     // IReactPackageProviders from react-native-webview
