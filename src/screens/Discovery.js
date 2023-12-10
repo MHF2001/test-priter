@@ -19,13 +19,13 @@ const Discovery = () => {
 
   const [printerBluetoothData, setPrinterBluetoothData] = useState([]);
   const [selectedPrinters, setSelectedPrinters] = useState([]);
+  const [selected, setSelected] = useState('');
   const [printersSelect, setPrintersSelect] = useState([
     'Main Printer',
     'Printer 1',
     'Printer 2',
   ]);
 
-  const [selected, setSelected] = useState('');
   const dispatch = useDispatch();
 
   const handelSetPrinterData = async () => {
@@ -61,6 +61,9 @@ const Discovery = () => {
   };
 
   useEffect(() => {
+    setSelectedPrinters([]);
+    setPrinterBluetoothData([]);
+    setSelected('');
     checkData();
   }, []);
   return (
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   text: {
-    color: '#000',
+    color: 'Black',
     fontSize: 16,
     marginTop: 30,
   },

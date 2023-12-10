@@ -14,179 +14,35 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 // import RNRestart from 'react-native-restart';
 import ThermalPrinterModule from '../components/ThermalPrinterModule';
 import CaptureHtmlToBitmap from '../components/MyWebView';
+import {clearData} from '../redux/printersReducers';
+import {useNavigation} from '@react-navigation/native';
 
 const PrinterInformation = () => {
   const [printing, setPrinting] = useState(false);
 
   const state = useSelector(state => state.printerReducers);
 
+  const navigation = useNavigation();
+
   const printSimpleReceipt = async () => {
     setPrinting(true);
 
-    const text =
-      '[C]<img>https://pngimg.com/d/mario_PNG125.png</img>\n' +
-      '[L]\n' +
-      "[C]<u><font size='big'>ORDER N°045</font></u>\n" +
-      '[L]\n' +
-      '[C]================================\n' +
-      '[L]\n' +
-      '[L]<b>BEAUTIFUL SHIRT</b>[R]9.99e\n' +
-      '[L]  + Size : S\n' +
-      '[L]\n' +
-      '[L]<b>AWESOME HAT</b>[R]24.99e\n' +
-      '[L]  + Size : 57/58\n' +
-      '[L]\n' +
-      '[C]--------------------------------\n' +
-      '[R]TOTAL PRICE :[R]34.98e\n' +
-      '[R]TAX :[R]4.23e\n' +
-      '[L]\n' +
-      '[C]================================\n' +
-      '[L]\n' +
-      "[L]<font size='tall'>Customer :</font>\n" +
-      '[L]Raymond DUPONT\n' +
-      '[L]5 rue des girafes\n' +
-      '[L]31547 PERPETES\n' +
-      '[L]Tel : +33801201456\n' +
-      '[L]\n' +
-      "[C]<barcode type='ean13' height='10'>831254784551</barcode>\n" +
-      "[C]<qrcode size='20'>http://www.developpeur-web.dantsu.com/</qrcode>\n" +
-      '[L]\n' +
-      '[L]\n' +
-      '[L]\n';
-
-    const text2 =
-      '[C]<img>https://assets.stickpng.com/images/61d183263a856e0004c6334a.png</img>\n' +
-      '[L]\n' +
-      '[L]\n' +
-      '[L]\n';
-
-    await ThermalPrinterModule.printBluetooth({
-      ip: '192.168.1.113',
-      payload: text2,
-    });
+    const text2 = 'Nard Printer';
     state?.forEach(async element => {
       if (element?.ipAddress) {
+        await ThermalPrinterModule.printTcp({
+          ip: element?.ipAddress,
+          payload: text2,
+        });
       } else {
-        // await ThermalPrinterModule.getBluetoothDeviceList();
-        // await ThermalPrinterModule.printBluetooth({
-        //   payload: text,
-        //   macAddress: element.macAddress,
-        // });
+        await ThermalPrinterModule.getBluetoothDeviceList();
+        await ThermalPrinterModule.printBluetooth({
+          payload: text2,
+          macAddress: element.macAddress,
+        });
       }
     });
     setPrinting(false);
-  };
-
-  const handlePrintMain = async () => {
-    const text =
-      '[C]<img>https://c8.alamy.com/comp/2RBE3KC/person-taking-picture-by-reflex-camera-man-with-black-photo-camera-in-warm-summer-day-2RBE3KC.jpg</img>\n' +
-      '[L]\n' +
-      "[C]<u><font size='big'>ORDER N°045</font></u>\n" +
-      '[L]\n' +
-      '[C]================================\n' +
-      '[L]\n' +
-      '[L]<b>BEAUTIFUL SHIRT</b>[R]9.99e\n' +
-      '[L]  + Size : S\n' +
-      '[L]\n' +
-      '[L]<b>AWESOME HAT</b>[R]24.99e\n' +
-      '[L]  + Size : 57/58\n' +
-      '[L]\n' +
-      '[C]--------------------------------\n' +
-      '[R]TOTAL PRICE :[R]34.98e\n' +
-      '[R]TAX :[R]4.23e\n' +
-      '[L]\n' +
-      '[C]================================\n' +
-      '[L]\n' +
-      "[L]<font size='tall'>Customer :</font>\n" +
-      '[L]Raymond DUPONT\n' +
-      '[L]5 rue des girafes\n' +
-      '[L]31547 PERPETES\n' +
-      '[L]Tel : +33801201456\n' +
-      '[L]\n' +
-      "[C]<barcode type='ean13' height='10'>831254784551</barcode>\n" +
-      "[C]<qrcode size='20'>http://www.developpeur-web.dantsu.com/</qrcode>\n" +
-      '[L]\n' +
-      '[L]\n' +
-      '[L]\n';
-
-    state?.forEach(async element => {
-      if (element.printer === 'Main Printer') {
-        if (element?.ipAddress) {
-          await ThermalPrinterModule.printTcp({
-            ip: element?.ipAddress,
-            payload: text,
-          });
-        } else {
-          await ThermalPrinterModule.getBluetoothDeviceList();
-          await ThermalPrinterModule.printBluetooth({
-            payload: text,
-            macAddress: element.macAddress,
-          });
-        }
-      }
-    });
-  };
-
-  const handlePrint1 = async () => {
-    const text2 =
-      '[C]<img>https://c8.alamy.com/comp/2RBE3KC/person-taking-picture-by-reflex-camera-man-with-black-photo-camera-in-warm-summer-day-2RBE3KC.jpg</img>\n' +
-      '[L]\n' +
-      "[C]<u><font size='big'> Kitchen 045</font></u>\n" +
-      '[L]\n' +
-      '[C]================================\n' +
-      "[C]<barcode type='ean13' height='10'>831254784551</barcode>\n" +
-      "[C]<qrcode size='20'>http://www.developpeur-web.dantsu.com/</qrcode>\n" +
-      '[L]\n' +
-      '[L]\n' +
-      '[L]\n';
-
-    state?.forEach(async element => {
-      if (element.printer === 'Printer 1') {
-        if (element?.ipAddress) {
-          await ThermalPrinterModule.printTcp({
-            ip: element?.ipAddress,
-            payload: text2,
-          });
-        } else {
-          await ThermalPrinterModule.getBluetoothDeviceList();
-          await ThermalPrinterModule.printBluetooth({
-            payload: text2,
-            macAddress: element.macAddress,
-          });
-        }
-      }
-    });
-  };
-
-  const handlePrint2 = async () => {
-    const text2 =
-      '[C]<img>https://c8.alamy.com/comp/2RBE3KC/person-taking-picture-by-reflex-camera-man-with-black-photo-camera-in-warm-summer-day-2RBE3KC.jpg</img>\n' +
-      '[L]\n' +
-      "[C]<u><font size='big'> Kitchen 045</font></u>\n" +
-      '[L]\n' +
-      '[C]================================\n' +
-      "[C]<barcode type='ean13' height='10'>831254784551</barcode>\n" +
-      "[C]<qrcode size='20'>http://www.developpeur-web.dantsu.com/</qrcode>\n" +
-      '[L]\n' +
-      '[L]\n' +
-      '[L]\n';
-
-    state?.forEach(async element => {
-      if (element.printer === 'Printer 2') {
-        if (element?.ipAddress) {
-          await ThermalPrinterModule.printTcp({
-            ip: element?.ipAddress,
-            payload: text2,
-          });
-        } else {
-          await ThermalPrinterModule.getBluetoothDeviceList();
-          await ThermalPrinterModule.printBluetooth({
-            payload: text2,
-            macAddress: element.macAddress,
-          });
-        }
-      }
-    });
   };
 
   return (
@@ -205,8 +61,9 @@ const PrinterInformation = () => {
             {/* }}> */}
             <TouchableOpacity
               onPress={() => {
+                clearData();
                 deleteAllData();
-                // RNRestart.restart();
+                navigation.goBack();
               }}>
               <Text
                 style={{
@@ -222,9 +79,9 @@ const PrinterInformation = () => {
 
             <View style={styles.contentCotainer}>
               <Button title="All Test print" onPress={printSimpleReceipt} />
-              <Button title="Main Test print" onPress={handlePrintMain} />
+              {/* <Button title="Main Test print" onPress={handlePrintMain} />
               <Button title="Printer 1 Test print" onPress={handlePrint1} />
-              <Button title="Printer 2 Test print" onPress={handlePrint2} />
+              <Button title="Printer 2 Test print" onPress={handlePrint2} /> */}
 
               <Text style={styles.errorText} />
             </View>

@@ -3,11 +3,13 @@ import {View, Button, useWindowDimensions} from 'react-native';
 import {WebView} from 'react-native-webview';
 import ThermalPrinterModule from '../ThermalPrinterModule';
 import {base} from './htmlContant';
+
 const MyWebView = ({onLoad, onLoadEnd}) => {
   const {height, width, scale, fontScale} = useWindowDimensions();
 
-  // What we we should do The forntend to send the data from URL to the app and the base46
   /*
+   What we we should do The forntend to send the data from URL to the app and the base46
+
     const downloadElement = () => {
     window.ReactNativeWebView.postMessage(state);
   };
@@ -22,17 +24,21 @@ const MyWebView = ({onLoad, onLoadEnd}) => {
         }}
   */
   const onMessage = async event => {
-    const userAgent = event.nativeEvent.data;
+    const data = event.nativeEvent.data;
+    console.log('====================================');
+    console.log(data);
+    console.log('====================================');
+
     const text2 = `[L]<img>${base}</img>\n`;
     await ThermalPrinterModule.printBluetooth({
-      ip: '192.168.1.113',
+      ip: '192.168.1.142',
       payload: text2,
     });
   };
 
   return (
     <WebView
-      source={{uri: 'https://nardpos.com/'}}
+      source={{uri: 'http://192.168.1.143:4200/'}}
       onLoad={onLoad}
       onLoadEnd={onLoadEnd}
       javascriptenabled={true}
@@ -60,19 +66,6 @@ const CaptureHtmlToBitmap = () => {
     setWebViewLoaded(true);
   };
 
-  const onMessage = async event => {
-    const userAgent = event.nativeEvent.data;
-    const text2 = `[L]<img>${base}</img>\n`;
-    await ThermalPrinterModule.printTcp({
-      ip: '192.168.1.142',
-      payload: text2,
-    });
-    await ThermalPrinterModule.printBluetooth({
-      ip: '192.168.1.142',
-      payload: text2,
-    });
-  };
-
   return (
     <>
       <View
@@ -80,11 +73,8 @@ const CaptureHtmlToBitmap = () => {
           flex: 1,
           backgroundColor: 'black',
         }}>
-        {/* <MyWebView ref={webViewRef} onLoad={onLoad} onLoadEnd={onLoadEnd} /> */}
-        <Button
-          title="dddddddddddddddddddddddddddddddddddddd"
-          onPress={onMessage}
-        />
+        <MyWebView ref={webViewRef} onLoad={onLoad} onLoadEnd={onLoadEnd} />
+        {/* <Button title="Print" onPress={onMessage} /> */}
       </View>
     </>
   );

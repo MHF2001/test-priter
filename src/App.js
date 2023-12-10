@@ -12,8 +12,8 @@ const App = () => {
     <>
       <ReduxProvider store={store}>
         <PersistGate persistor={persister} loading={null}>
-          {/* <RootNavigator /> */}
-          <CaptureHtmlToBitmap />
+          <RootNavigator />
+          {/* <CaptureHtmlToBitmap /> */}
         </PersistGate>
       </ReduxProvider>
     </>

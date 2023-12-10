@@ -15,7 +15,14 @@ const printerReducers = createSlice({
     addPrinter: (state, action) => {
       return [...state, action.payload];
     },
+    deletePrinter: (state, action) => {
+      return state.filter(item => item.id !== action.payload.id);
+    },
+    clearData: (state, action) => {
+      return initialState;
+    },
   },
 });
-export const {printersArray, addPrinter} = printerReducers.actions;
+export const {printersArray, addPrinter, deletePrinter, clearData} =
+  printerReducers.actions;
 export const reducer = printerReducers.reducer;
