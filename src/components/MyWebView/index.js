@@ -45,8 +45,6 @@ const MyWebView = ({onLoad, onLoadEnd}) => {
     if (parseData.isPrinterSetting) {
       navigation.navigate('Discovery');
     } else {
-      const text2 = `[L]<img>${parseData.image}</img>\n`;
-
       state?.forEach(async element => {
         for (const printer of printers) {
           // Check if the printer.name === the printer info
@@ -54,12 +52,12 @@ const MyWebView = ({onLoad, onLoadEnd}) => {
             if (element?.ipAddress) {
               await ThermalPrinterModule.printTcp({
                 ip: element?.ipAddress,
-                payload: text2, // or `image-${printer.key}`
+                payload: `[L]<img>image-${printer.key}</img>\n`,
               });
             } else {
               await ThermalPrinterModule.getBluetoothDeviceList();
               await ThermalPrinterModule.printBluetooth({
-                payload: text2, // or `image-${printer.key}`
+                payload: `[L]<img>image-${printer.key}</img>\n`,
                 macAddress: element.macAddress,
               });
             }
