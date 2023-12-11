@@ -21,6 +21,11 @@ export const RootNavigator = () => {
               component={MyWebView}
               options={{headerShown: false}}
             />
+            <Stack.Screen name="Discovery" component={Discovery} />
+            <Stack.Screen
+              name="PrinterInformation"
+              component={PrinterInformation}
+            />
           </>
         ) : (
           <>

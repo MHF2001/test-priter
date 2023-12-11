@@ -10,8 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SelectDropdown from 'react-native-select-dropdown';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch} from 'react-redux';
-import {printersArray, addPrinter} from '../redux/printersReducers';
-import CaptureHtmlToBitmap from '../components/MyWebView';
+import {printersArray} from '../redux/printersReducers';
 
 const Discovery = () => {
   const {start, printerError, isDiscovering, printers} = usePrintersDiscovery();
@@ -61,14 +60,10 @@ const Discovery = () => {
   };
 
   useEffect(() => {
-    setSelectedPrinters([]);
-    setPrinterBluetoothData([]);
-    setSelected('');
     checkData();
   }, []);
   return (
     <SafeAreaView style={styles.saveAreaViewContainer}>
-      {/* <CaptureHtmlToBitmap /> */}
       <View style={styles.container}>
         <View>
           <SelectDropdown
@@ -89,24 +84,24 @@ const Discovery = () => {
               printers={[...printers, ...printerBluetoothData]}
             />
           </View>
+          <View style={styles.contentContainer}>
+            {selectedPrinters?.length !== 0 ? (
+              <Button
+                loading={isDiscovering}
+                title="Next"
+                onPress={() => handleSaveData()}
+                style={styles.text}
+              />
+            ) : (
+              <Button
+                loading={isDiscovering}
+                title="Search"
+                onPress={() => handelSetPrinterData()}
+                style={styles.text}
+              />
+            )}
+          </View>
         </ScrollView>
-        <View style={styles.contentContainer}>
-          {selectedPrinters?.length > 0 ? (
-            <Button
-              loading={isDiscovering}
-              title="Next"
-              onPress={() => handleSaveData()}
-              style={styles.text}
-            />
-          ) : (
-            <Button
-              loading={isDiscovering}
-              title="Search"
-              onPress={() => handelSetPrinterData()}
-              style={styles.text}
-            />
-          )}
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -134,7 +129,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   text: {
-    color: 'Black',
+    color: '#000',
     fontSize: 16,
     marginTop: 30,
   },

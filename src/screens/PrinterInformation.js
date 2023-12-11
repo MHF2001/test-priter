@@ -11,11 +11,10 @@ import PrinterInfo from '../components/PrinterInfo/PrinterInfo';
 import {Button} from '../components/Button';
 import {useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
-// import RNRestart from 'react-native-restart';
 import ThermalPrinterModule from '../components/ThermalPrinterModule';
-import CaptureHtmlToBitmap from '../components/MyWebView';
 import {clearData} from '../redux/printersReducers';
 import {useNavigation} from '@react-navigation/native';
+import RNRestart from 'react-native-restart';
 
 const PrinterInformation = () => {
   const [printing, setPrinting] = useState(false);
@@ -45,6 +44,10 @@ const PrinterInformation = () => {
     setPrinting(false);
   };
 
+  const handleGoToNard = () => {
+    navigation.navigate('webView');
+  };
+
   return (
     <>
       <SafeAreaView style={styles.saveAreaViewContainer}>
@@ -63,7 +66,7 @@ const PrinterInformation = () => {
               onPress={() => {
                 clearData();
                 deleteAllData();
-                navigation.goBack();
+                RNRestart.Restart();
               }}>
               <Text
                 style={{
@@ -78,12 +81,11 @@ const PrinterInformation = () => {
             {state && state?.map(ele => <PrinterInfo printer={ele} />)}
 
             <View style={styles.contentCotainer}>
-              <Button title="All Test print" onPress={printSimpleReceipt} />
-              {/* <Button title="Main Test print" onPress={handlePrintMain} />
-              <Button title="Printer 1 Test print" onPress={handlePrint1} />
-              <Button title="Printer 2 Test print" onPress={handlePrint2} /> */}
-
+              <Button title="Test All Printer" onPress={printSimpleReceipt} />
               <Text style={styles.errorText} />
+            </View>
+            <View style={styles.button}>
+              <Button title="Go To NardPos" onPress={handleGoToNard} />
             </View>
           </View>
         </ScrollView>
@@ -104,6 +106,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
+  },
+  button: {
+    margin: 10,
   },
 });
 

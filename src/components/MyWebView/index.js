@@ -1,17 +1,29 @@
 import React, {useRef, useState} from 'react';
-import {View, Button, useWindowDimensions} from 'react-native';
+import {View, useWindowDimensions} from 'react-native';
 import {WebView} from 'react-native-webview';
 import ThermalPrinterModule from '../ThermalPrinterModule';
 import {base} from './htmlContant';
+import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {WEBSITE_URL} from '../../Env';
 
 const MyWebView = ({onLoad, onLoadEnd}) => {
   const {height, width, scale, fontScale} = useWindowDimensions();
+  const state = useSelector(state => state.printerReducers);
+  const [printers, setPrinters] = useState([
+    {name: 'Main Printer', key: 'main_printer'},
+    {name: 'Printer 1', key: 'printer_1'},
+    {name: 'Printer 2', key: 'printer_2'},
+  ]);
+  // Navigation
+  const navigation = useNavigation();
 
   /*
    What we we should do The forntend to send the data from URL to the app and the base46
 
     const downloadElement = () => {
-    window.ReactNativeWebView.postMessage(state);
+      The data will be JSON with tow keys (image, printerSettings)
+    window.ReactNativeWebView.postMessage(data );
   };
 
 
@@ -28,17 +40,38 @@ const MyWebView = ({onLoad, onLoadEnd}) => {
     console.log('====================================');
     console.log(data);
     console.log('====================================');
+    const parseData = JSON.parse(data);
 
-    const text2 = `[L]<img>${base}</img>\n`;
-    await ThermalPrinterModule.printBluetooth({
-      ip: '192.168.1.142',
-      payload: text2,
-    });
+    if (parseData.isPrinterSetting) {
+      navigation.navigate('Discovery');
+    } else {
+      const text2 = `[L]<img>${parseData.image}</img>\n`;
+
+      state?.forEach(async element => {
+        for (const printer of printers) {
+          // Check if the printer.name === the printer info
+          if (printer.name === element.printer) {
+            if (element?.ipAddress) {
+              await ThermalPrinterModule.printTcp({
+                ip: element?.ipAddress,
+                payload: text2, // or `image-${printer.key}`
+              });
+            } else {
+              await ThermalPrinterModule.getBluetoothDeviceList();
+              await ThermalPrinterModule.printBluetooth({
+                payload: text2, // or `image-${printer.key}`
+                macAddress: element.macAddress,
+              });
+            }
+          }
+        }
+      });
+    }
   };
 
   return (
     <WebView
-      source={{uri: 'http://192.168.1.143:4200/'}}
+      source={{uri: WEBSITE_URL}}
       onLoad={onLoad}
       onLoadEnd={onLoadEnd}
       javascriptenabled={true}
