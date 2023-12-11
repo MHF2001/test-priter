@@ -5,6 +5,7 @@ import Discovery from '../../screens/Discovery';
 import PrinterInformation from '../../screens/PrinterInformation';
 import {useSelector} from 'react-redux';
 import MyWebView from '../MyWebView';
+import TopTabNavigation from './TabNavigation';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,29 +14,23 @@ export const RootNavigator = () => {
 
   return (
     <NavigationContainer>
+      {/* <TopTabNavigation /> */}
       <Stack.Navigator>
-        {state?.length > 0 ? (
-          <>
-            <Stack.Screen
-              name="webView"
-              component={MyWebView}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen name="Discovery" component={Discovery} />
-            <Stack.Screen
-              name="PrinterInformation"
-              component={PrinterInformation}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="Discovery" component={Discovery} />
-            <Stack.Screen
-              name="PrinterInformation"
-              component={PrinterInformation}
-            />
-          </>
-        )}
+        <Stack.Screen
+          name="TopNavigation"
+          options={{headerShown: false}}
+          component={TopTabNavigation}
+        />
+        {/* <Stack.Screen
+          name="webView"
+          component={MyWebView}
+          options={{headerShown: false}}
+        /> */}
+        <Stack.Screen name="Discovery" component={Discovery} />
+        <Stack.Screen
+          name="PrinterInformation"
+          component={PrinterInformation}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -14,6 +14,10 @@ const MyWebView = ({onLoad, onLoadEnd}) => {
     {name: 'Main Printer', key: 'main_printer'},
     {name: 'Printer 1', key: 'printer_1'},
     {name: 'Printer 2', key: 'printer_2'},
+    {name: 'Printer 3', key: 'printer_3'},
+    {name: 'Printer 4', key: 'printer_4'},
+    {name: 'Printer 5', key: 'printer_5'},
+    {name: 'Printer 6', key: 'printer_6'},
   ]);
   // Navigation
   const navigation = useNavigation();

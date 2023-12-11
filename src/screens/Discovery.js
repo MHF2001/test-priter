@@ -23,6 +23,10 @@ const Discovery = () => {
     'Main Printer',
     'Printer 1',
     'Printer 2',
+    'Printer 3',
+    'Printer 4',
+    'Printer 5',
+    'Printer 6',
   ]);
 
   const dispatch = useDispatch();
@@ -71,9 +75,24 @@ const Discovery = () => {
             onSelect={(selectedItem, index) => {
               setSelected(selectedItem);
             }}
+            defaultButtonText="Select Printer"
+            buttonStyle={{
+              backgroundColor: '#fff',
+              width: '50%',
+              height: 40,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: '#000',
+              paddingHorizontal: 10,
+              marginTop: 10,
+            }}
           />
         </View>
-        <ScrollView>
+        <ScrollView
+          style={{
+            width: '100%',
+            height: '100%',
+          }}>
           <View style={styles.contentContainer}>
             <PrintersList
               onPress={printer => {
