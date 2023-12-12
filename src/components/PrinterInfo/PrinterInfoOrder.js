@@ -1,10 +1,10 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
-import {removeMainPrinter} from '../../redux/printersReducers';
+import {removeMainPrinter, removePrinter} from '../../redux/printersReducers';
 import {useDispatch} from 'react-redux';
 
-const PrinterInfo = ({printer}) => {
+const PrinterInfoOrder = ({printer}) => {
   const dispatch = useDispatch();
   const renderPrinterInfo = () => {
     return Object.keys(printer).map(key => {
@@ -24,7 +24,7 @@ const PrinterInfo = ({printer}) => {
       {renderPrinterInfo()}
       <TouchableOpacity
         onPress={() => {
-          dispatch(removeMainPrinter(printer.deviceName));
+          dispatch(removePrinter(printer.deviceName));
         }}
         style={{
           backgroundColor: '#fff',
@@ -45,4 +45,4 @@ const PrinterInfo = ({printer}) => {
   );
 };
 
-export default PrinterInfo;
+export default PrinterInfoOrder;

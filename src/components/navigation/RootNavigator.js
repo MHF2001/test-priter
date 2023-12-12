@@ -15,15 +15,16 @@ export const RootNavigator = () => {
       {/* <TopTabNavigation /> */}
       <Stack.Navigator>
         <Stack.Screen
+          name="webView"
+          component={MyWebView}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="TopNavigation"
           options={{headerShown: false}}
           component={TopTabNavigation}
         />
-        {/* <Stack.Screen
-          name="webView"
-          component={MyWebView}
-          options={{headerShown: false}}
-        /> */}
+
         <Stack.Screen name="Discovery" component={Discovery} />
         <Stack.Screen
           name="PrinterInformation"

@@ -47,7 +47,7 @@ const MyWebView = ({onLoad, onLoadEnd}) => {
     const parseData = JSON.parse(data);
 
     if (parseData.isPrinterSetting) {
-      navigation.navigate('Discovery');
+      navigation.navigate('TopNavigation');
     } else {
       state?.forEach(async element => {
         for (const printer of printers) {

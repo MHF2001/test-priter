@@ -6,20 +6,15 @@ import {
   ScrollView,
 } from 'react-native';
 import React, {useState} from 'react';
-import {deleteAllData} from '../components/storeData';
-import PrinterInfo from '../components/PrinterInfo/PrinterInfo';
 import {Button} from '../components/Button';
 import {useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ThermalPrinterModule from '../components/ThermalPrinterModule';
-import {clearData} from '../redux/printersReducers';
 import {useNavigation} from '@react-navigation/native';
-import RNRestart from 'react-native-restart';
+import PrinterInfoOrder from '../components/PrinterInfo/PrinterInfoOrder';
 
-const PrinterInformation = () => {
+const PrinterInformation = ({filterData}) => {
   const [printing, setPrinting] = useState(false);
-
-  const {printers} = useSelector(state => state.printerReducers);
 
   const navigation = useNavigation();
 
@@ -27,7 +22,7 @@ const PrinterInformation = () => {
     setPrinting(true);
 
     const text2 = 'Nard Printer';
-    printers?.forEach(async element => {
+    filterData?.forEach(async element => {
       if (element?.ipAddress) {
         await ThermalPrinterModule.printTcp({
           ip: element?.ipAddress,
@@ -52,32 +47,11 @@ const PrinterInformation = () => {
     <>
       <SafeAreaView style={styles.saveAreaViewContainer}>
         <ScrollView>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              padding: 10,
-              backgroundColor: '#fcf9f9',
-              width: '100%',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                clearData();
-                deleteAllData();
-                RNRestart.Restart();
-              }}>
-              <Text
-                style={{
-                  color: '#000',
-                }}>
-                Clear Data
-              </Text>
-            </TouchableOpacity>
-          </View>
-
           <View style={styles.container}>
-            {/* {printers && printers?.map(ele => <PrinterInfo printer={ele} />)} */}
+            {filterData &&
+              filterData?.map((ele, i) => (
+                <PrinterInfoOrder key={i} printer={ele} />
+              ))}
 
             <View style={styles.contentCotainer}>
               <Button title="Test All Printer" onPress={printSimpleReceipt} />

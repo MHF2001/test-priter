@@ -1,32 +1,37 @@
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import Accordion from 'react-native-collapsible/Accordion';
-import Discovery from './Discovery';
 import OrderPrinterComponent from '../components/OrderPrinterComponent';
 
 const OrderPrinter = () => {
   const printersSelect = [
     {
+      id: 1,
       title: 'Printer 1',
       content: <OrderPrinterComponent printerName={'Printer 1'} />,
     },
     {
+      id: 2,
       title: 'Printer 2',
       content: <OrderPrinterComponent printerName={'Printer 2'} />,
     },
     {
+      id: 3,
       title: 'Printer 3',
       content: <OrderPrinterComponent printerName={'Printer 3'} />,
     },
     {
+      id: 4,
       title: 'Printer 4',
       content: <OrderPrinterComponent printerName={'Printer 4'} />,
     },
     {
+      id: 5,
       title: 'Printer 5',
       content: <OrderPrinterComponent printerName={'Printer 5'} />,
     },
     {
+      id: 6,
       title: 'Printer 6',
       content: <OrderPrinterComponent printerName={'Printer 6'} />,
     },
@@ -46,7 +51,7 @@ const OrderPrinter = () => {
   };
 
   const renderContent = section => {
-    return <View>{section.content}</View>;
+    return <View key={section.title}>{section.content}</View>;
   };
   return (
     <ScrollView>
@@ -76,7 +81,7 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     paddingHorizontal: 10,
     marginTop: 10,
-    width: '60%',
+    width: '100%',
     alignSelf: 'center',
     borderRadius: 10,
   },

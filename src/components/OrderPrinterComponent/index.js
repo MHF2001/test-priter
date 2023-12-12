@@ -6,15 +6,19 @@ import PrinterInformation from '../../screens/PrinterInformation';
 import Discovery from '../../screens/Discovery';
 import WifiDiscovery from '../../screens/WifiDiscovery';
 
-const OrderPrinterComponent = ({printerType}) => {
+const OrderPrinterComponent = ({printerName}) => {
   const {printers} = useSelector(state => state.printerReducers);
   const printerTypes = ['Sunmi', 'Wifi', 'IMEN', 'Others'];
   const [selected, setSelected] = useState('');
+
+  const filterData = printers?.filter(
+    element => element.printer === printerName,
+  );
   return (
     <View>
-      {printers && printers?.length > 0 ? (
+      {filterData && filterData?.length > 0 ? (
         <>
-          <PrinterInformation />
+          <PrinterInformation filterData={filterData} />
         </>
       ) : (
         <>
@@ -41,13 +45,13 @@ const OrderPrinterComponent = ({printerType}) => {
             />
           </View>
           {selected === 'Sunmi' ? (
-            <Discovery printerTyp={printerType} />
+            <Discovery printerName={printerName} />
           ) : selected === 'Wifi' ? (
-            <WifiDiscovery printerType={printerType} />
+            <WifiDiscovery printerName={printerName} />
           ) : selected === 'IMEN' ? (
-            <Discovery printerType={printerType} />
+            <Discovery printerName={printerName} />
           ) : selected === 'Others' ? (
-            <Discovery printerType={printerType} />
+            <Discovery printerName={printerName} />
           ) : (
             <></>
           )}

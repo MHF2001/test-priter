@@ -9,6 +9,9 @@ export const printerReducer = createSlice({
 
   reducers: {
     setPrinters: (state, action) => {
+      console.log('====================================');
+      console.log(action.payload);
+      console.log('====================================');
       state.printers = [...state.printers, ...action.payload];
     },
     setMainPrinter: (state, action) => {
@@ -16,7 +19,7 @@ export const printerReducer = createSlice({
     },
     removePrinter: (state, action) => {
       state.printers = state.printers.filter(
-        item => item.name !== action.payload,
+        item => item.deviceName !== action.payload,
       );
     },
 

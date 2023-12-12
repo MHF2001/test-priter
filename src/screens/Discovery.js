@@ -41,22 +41,10 @@ const Discovery = ({printerName}) => {
   };
 
   const handleSaveData = async () => {
-    storeData(printerName, selectedPrinters);
+    storeData('printer', selectedPrinters);
     dispatch(setPrinters(selectedPrinters));
-    // navigation.navigate('PrinterInformation');
   };
 
-  const checkData = async () => {
-    const value = await AsyncStorage.getItem('printer');
-    const parseValue = JSON.parse(value);
-    if (parseValue) {
-      navigation.navigate('PrinterInformation', {data: parseValue});
-    }
-  };
-
-  useEffect(() => {
-    checkData();
-  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>

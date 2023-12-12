@@ -61,7 +61,8 @@ const MainPrinterInformation = ({setNewPrinter}) => {
       </View>
 
       <View style={styles.container}>
-        {mainPrinter && mainPrinter?.map(ele => <PrinterInfo printer={ele} />)}
+        {mainPrinter &&
+          mainPrinter?.map((ele, i) => <PrinterInfo key={i} printer={ele} />)}
 
         <View style={styles.contentCotainer}>
           <Button title="Test All Printer" onPress={printSimpleReceipt} />
