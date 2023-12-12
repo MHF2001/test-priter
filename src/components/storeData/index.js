@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const storeData = async value => {
+export const storeData = async (key, value) => {
   try {
     const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem('printer', jsonValue);
+    await AsyncStorage.setItem(key, jsonValue);
   } catch (e) {
     console.log('====================================');
     console.log(`Error while save Data: ${e}`);
@@ -11,9 +11,9 @@ export const storeData = async value => {
   }
 };
 
-export const getData = async () => {
+export const getData = async key => {
   try {
-    const value = await AsyncStorage.getItem('printer');
+    const value = await AsyncStorage.getItem(key);
     const parseValue = JSON.parse(value);
     if (parseValue !== null) {
       return parseValue;
@@ -28,7 +28,7 @@ export const getData = async () => {
   }
 };
 
-export const deleteAllData = async () => {
+export const deleteAllData = async key => {
   try {
     await AsyncStorage.clear();
   } catch (e) {

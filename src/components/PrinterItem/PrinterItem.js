@@ -10,11 +10,12 @@ export const PrinterItem = ({printer, onPress}) => {
 
   const handlePress = () => {
     onPress(printer);
-    setIsPressed(true);
+    setIsPressed(!isPressed);
   };
   return (
     <Pressable
       onPress={() => handlePress()}
+      // disabled={isPressed}
       style={{
         ...styles.container,
       }}>

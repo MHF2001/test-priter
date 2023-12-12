@@ -1,24 +1,20 @@
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {View, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
 import {usePrintersDiscovery} from 'react-native-esc-pos-printer';
 import {NativeModules} from 'react-native';
 import {Button} from '../components/Button';
 import {PrintersList} from '../components/PrintersList';
 import {storeData} from '../components/storeData';
 import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import SelectDropdown from 'react-native-select-dropdown';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch} from 'react-redux';
-import {printersArray, setPrinters} from '../redux/printersReducers';
+import {setMainPrinter} from '../redux/printersReducers';
 
-const Discovery = ({printerName}) => {
+const MainDiscovery = ({setNewPrinter}) => {
   const {start, printerError, isDiscovering, printers} = usePrintersDiscovery();
-  const navigation = useNavigation();
 
   const [printerBluetoothData, setPrinterBluetoothData] = useState([]);
   const [selectedPrinters, setSelectedPrinters] = useState([]);
-  const [selected, setSelected] = useState('');
 
   const dispatch = useDispatch();
 
@@ -36,72 +32,74 @@ const Discovery = ({printerName}) => {
   const handelSelectPrinter = printer => {
     setSelectedPrinters([
       ...selectedPrinters,
-      {...printer, ...{printer: printerName}},
+      {...printer, ...{printer: 'Main printer'}},
     ]);
   };
-
-  const handleSaveData = async () => {
-    storeData(printerName, selectedPrinters);
-    dispatch(setPrinters(selectedPrinters));
-    // navigation.navigate('PrinterInformation');
+  const handleSaveData = () => {
+    storeData('mainPrinter', selectedPrinters);
+    dispatch(setMainPrinter(selectedPrinters));
+    setNewPrinter(false);
   };
 
-  const checkData = async () => {
-    const value = await AsyncStorage.getItem('printer');
-    const parseValue = JSON.parse(value);
-    if (parseValue) {
-      navigation.navigate('PrinterInformation', {data: parseValue});
-    }
-  };
-
-  useEffect(() => {
-    checkData();
-  }, []);
   return (
-    <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        <PrintersList
-          onPress={printer => {
-            if (printer) {
-              handelSelectPrinter(printer);
-            }
-          }}
-          printers={[...printers, ...printerBluetoothData]}
-        />
-      </View>
-      <View style={styles.contentContainer}>
-        {selectedPrinters?.length !== 0 ? (
-          <Button
-            loading={isDiscovering}
-            title="Next"
-            onPress={() => handleSaveData()}
-            style={styles.text}
+    <>
+      <View style={styles.container}>
+        <View style={styles.contentContainer}>
+          <PrintersList
+            onPress={printer => {
+              if (printer) {
+                handelSelectPrinter(printer);
+              }
+            }}
+            printers={[...printers, ...printerBluetoothData]}
           />
+        </View>
+      </View>
+      <View style={styles.buttonContainer}>
+        {selectedPrinters && selectedPrinters?.length > 0 ? (
+          <>
+            <Button
+              loading={isDiscovering}
+              title="Next"
+              onPress={() => handleSaveData()}
+              style={styles.text}
+            />
+          </>
         ) : (
           <Button
             loading={isDiscovering}
-            title="Search"
+            title="Search for main printer"
             onPress={() => handelSetPrinterData()}
             style={styles.text}
           />
         )}
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  saveAreaViewContainer: {flex: 1},
+  saveAreaViewContainer: {flex: 1, backgroundColor: '#FFF'},
   container: {
-    alignItems: 'center',
+    flex: 1,
+    backgroundColor: '#fcf9f9',
+  },
+
+  buttonContainer: {
+    paddingHorizontal: 20,
+    position: 'absolute',
+    top: 500,
     justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
 
   contentContainer: {
+    flex: 1,
     alignItems: 'center',
     paddingHorizontal: 20,
     marginTop: 20,
-    marginVertical: 10,
   },
 
   errorText: {
@@ -116,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Discovery;
+export default MainDiscovery;

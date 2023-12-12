@@ -1,28 +1,34 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-const initialState = {
-  printer: [],
-};
+export const printerReducer = createSlice({
+  name: 'printers',
+  initialState: {
+    printers: [],
+    mainPrinter: [],
+  },
 
-const printerReducers = createSlice({
-  name: 'usePrinter',
-  initialState,
   reducers: {
-    printersArray: (state, action) => {
-      return action.payload;
+    setPrinters: (state, action) => {
+      state.printers = [...state.printers, ...action.payload];
+    },
+    setMainPrinter: (state, action) => {
+      state.mainPrinter = [...state.mainPrinter, ...action.payload];
+    },
+    removePrinter: (state, action) => {
+      state.printers = state.printers.filter(
+        item => item.name !== action.payload,
+      );
     },
 
-    addPrinter: (state, action) => {
-      return [...state, action.payload];
-    },
-    deletePrinter: (state, action) => {
-      return state.filter(item => item.id !== action.payload.id);
-    },
-    clearData: (state, action) => {
-      return initialState;
+    removeMainPrinter: (state, action) => {
+      state.mainPrinter = state.mainPrinter.filter(
+        item => item.deviceName !== action.payload,
+      );
     },
   },
 });
-export const {printersArray, addPrinter, deletePrinter, clearData} =
-  printerReducers.actions;
-export const reducer = printerReducers.reducer;
+
+export const {setPrinters, setMainPrinter, removePrinter, removeMainPrinter} =
+  printerReducer.actions;
+
+export default printerReducer.reducer;

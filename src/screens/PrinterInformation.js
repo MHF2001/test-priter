@@ -19,7 +19,7 @@ import RNRestart from 'react-native-restart';
 const PrinterInformation = () => {
   const [printing, setPrinting] = useState(false);
 
-  const state = useSelector(state => state.printerReducers);
+  const {printers} = useSelector(state => state.printerReducers);
 
   const navigation = useNavigation();
 
@@ -27,7 +27,7 @@ const PrinterInformation = () => {
     setPrinting(true);
 
     const text2 = 'Nard Printer';
-    state?.forEach(async element => {
+    printers?.forEach(async element => {
       if (element?.ipAddress) {
         await ThermalPrinterModule.printTcp({
           ip: element?.ipAddress,
@@ -61,7 +61,6 @@ const PrinterInformation = () => {
               backgroundColor: '#fcf9f9',
               width: '100%',
             }}>
-            {/* }}> */}
             <TouchableOpacity
               onPress={() => {
                 clearData();
@@ -78,7 +77,7 @@ const PrinterInformation = () => {
           </View>
 
           <View style={styles.container}>
-            {state && state?.map(ele => <PrinterInfo printer={ele} />)}
+            {/* {printers && printers?.map(ele => <PrinterInfo printer={ele} />)} */}
 
             <View style={styles.contentCotainer}>
               <Button title="Test All Printer" onPress={printSimpleReceipt} />
