@@ -14,11 +14,11 @@ export const RootNavigator = () => {
     <NavigationContainer>
       {/* <TopTabNavigation /> */}
       <Stack.Navigator>
-        <Stack.Screen
+        {/* <Stack.Screen
           name="webView"
           component={MyWebView}
           options={{headerShown: false}}
-        />
+        /> */}
         <Stack.Screen
           name="TopNavigation"
           options={{headerShown: false}}

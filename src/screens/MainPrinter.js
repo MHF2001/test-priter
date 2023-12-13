@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 import MainPrinterInformation from './MainPrinterInformation';
 import SelectDropdown from 'react-native-select-dropdown';
 import WifiDiscovery from './WifiDiscovery';
+import {deleteAllData} from '../components/storeData';
 
 const Main = () => {
   const {mainPrinter} = useSelector(state => state.printerReducers);

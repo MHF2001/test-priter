@@ -11,11 +11,12 @@ import {Button} from '../components/Button';
 import {useSelector} from 'react-redux';
 import ThermalPrinterModule from '../components/ThermalPrinterModule';
 import {useNavigation} from '@react-navigation/native';
+import {base} from '../components/MyWebView/htmlContant';
 
 const MainPrinterInformation = ({setNewPrinter}) => {
   const [printing, setPrinting] = useState(false);
 
-  const {mainPrinter} = useSelector(state => state.printerReducers);
+  const {mainPrinter, printers} = useSelector(state => state.printerReducers);
 
   const navigation = useNavigation();
 
@@ -27,17 +28,61 @@ const MainPrinterInformation = ({setNewPrinter}) => {
       if (element?.ipAddress) {
         await ThermalPrinterModule.printTcp({
           ip: element?.ipAddress,
-          payload: text2,
+          /*  payload:
+            '[L]\n' +
+            `[C]<u><font>NARD POS Printer => ${element.printer}</font></u>\n` +
+            '[L]\n', */
+          payload: `[C]<img>${base}</img>\n`,
         });
       } else {
         await ThermalPrinterModule.getBluetoothDeviceList();
         await ThermalPrinterModule.printBluetooth({
-          payload: text2,
+          /*  payload:
+            '[L]\n' +
+            `[C]<u><font>NARD POS Printer => ${element.printer}</font></u>\n` +
+            '[L]\n', */
+          payload: `[C]<img>${base}</img>\n`,
           macAddress: element.macAddress,
         });
       }
     });
     setPrinting(false);
+  };
+
+  const printAll = () => {
+    setPrinting(true);
+    mainPrinter?.forEach(async element => {
+      if (element?.ipAddress) {
+        await ThermalPrinterModule.printTcp({
+          ip: element?.ipAddress,
+          payload: `[C]<img>${base}</img>\n`,
+        });
+      } else {
+        await ThermalPrinterModule.getBluetoothDeviceList();
+        await ThermalPrinterModule.printBluetooth({
+          payload: `[C]<img>${base}</img>\n`,
+
+          macAddress: element.macAddress,
+        });
+      }
+    });
+    printers?.forEach(async element => {
+      if (element?.ipAddress) {
+        await ThermalPrinterModule.printTcp({
+          ip: element?.ipAddress,
+          payload: `[C]<img>${base}</img>\n`,
+        });
+      } else {
+        await ThermalPrinterModule.getBluetoothDeviceList();
+        await ThermalPrinterModule.printBluetooth({
+          payload:
+            '[L]\n' +
+            `[C]<u><font>NARD POS Printer => ${element.printer}</font></u>\n` +
+            '[L]\n',
+          macAddress: element.macAddress,
+        });
+      }
+    });
   };
 
   const handleGoToNard = () => {
@@ -65,12 +110,16 @@ const MainPrinterInformation = ({setNewPrinter}) => {
           mainPrinter?.map((ele, i) => <PrinterInfo key={i} printer={ele} />)}
 
         <View style={styles.contentCotainer}>
-          <Button title="Test All Printer" onPress={printSimpleReceipt} />
+          <Button title="Test All Main Printer" onPress={printSimpleReceipt} />
           <Text style={styles.errorText} />
         </View>
         <View style={styles.button}>
           <Button title="Go To NardPos" onPress={handleGoToNard} />
         </View>
+      </View>
+      <View style={styles.contentCotainer}>
+        <Button title="Test All Printer" onPress={printAll} />
+        <Text style={styles.errorText} />
       </View>
     </ScrollView>
   );
