@@ -12,7 +12,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import ThermalPrinterModule from '../components/ThermalPrinterModule';
 import {useNavigation} from '@react-navigation/native';
 import PrinterInfoOrder from '../components/PrinterInfo/PrinterInfoOrder';
-import {base} from '../components/MyWebView/htmlContant';
+import {base, base2} from '../components/MyWebView/htmlContant';
 
 const PrinterInformation = ({filterData}) => {
   const [printing, setPrinting] = useState(false);
@@ -32,6 +32,14 @@ const PrinterInformation = ({filterData}) => {
             `[C]<u><font>NARD POS Printer => ${element.printer}</font></u>\n` +
             '[L]\n', */
           payload: `[C]<img>${base}</img>\n`,
+        });
+        await ThermalPrinterModule.printTcp({
+          ip: element?.ipAddress,
+          /*  payload:
+            '[L]\n' +
+            `[C]<u><font>NARD POS Printer => ${element.printer}</font></u>\n` +
+            '[L]\n', */
+          payload: `[C]<img>${base2}</img>\n`,
         });
       } else {
         await ThermalPrinterModule.getBluetoothDeviceList();

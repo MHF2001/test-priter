@@ -5,20 +5,53 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import PrinterInfo from '../components/PrinterInfo/PrinterInfo';
 import {Button} from '../components/Button';
 import {useSelector} from 'react-redux';
 import ThermalPrinterModule from '../components/ThermalPrinterModule';
 import {useNavigation} from '@react-navigation/native';
-import {base} from '../components/MyWebView/htmlContant';
-
+import {base, base2} from '../components/MyWebView/htmlContant';
+import ViewShot from 'react-native-view-shot';
+import Invoice from '../components/Invoice/Invoice';
 const MainPrinterInformation = ({setNewPrinter}) => {
   const [printing, setPrinting] = useState(false);
+  const [isCaptured, setCaptured] = useState(false);
+
+  const viewShotRef = useRef(null);
 
   const {mainPrinter, printers} = useSelector(state => state.printerReducers);
 
   const navigation = useNavigation();
+
+  const onCapture = useCallback(() => {
+    if (viewShotRef.current) {
+      viewShotRef.current.capture().then(uri => {
+        console.log('Image captured', uri);
+        setCaptured(true);
+
+        mainPrinter?.forEach(async element => {
+          if (element?.ipAddress) {
+            // await ThermalPrinterModule.printTcp({
+            //   ip: element?.ipAddress,
+            //   payload: `[C]<img>${uri}</img>\n`,
+            // });
+            await ThermalPrinterModule.printTcp({
+              ip: element?.ipAddress,
+              payload: `[C]<img>${uri}</img>\n` + `[C]<img>${uri}</img>\n`,
+            });
+          } else {
+            await ThermalPrinterModule.getBluetoothDeviceList();
+            await ThermalPrinterModule.printBluetooth({
+              payload: `[C]<img>${uri}</img>\n`,
+
+              macAddress: element.macAddress,
+            });
+          }
+        });
+      });
+    }
+  }, [viewShotRef]);
 
   const printSimpleReceipt = async () => {
     setPrinting(true);
@@ -33,6 +66,14 @@ const MainPrinterInformation = ({setNewPrinter}) => {
             `[C]<u><font>NARD POS Printer => ${element.printer}</font></u>\n` +
             '[L]\n', */
           payload: `[C]<img>${base}</img>\n`,
+        });
+        await ThermalPrinterModule.printTcp({
+          ip: '192.168.1.142',
+          /*  payload:
+            '[L]\n' +
+            `[C]<u><font>NARD POS Printer => ${element.printer}</font></u>\n` +
+            '[L]\n', */
+          payload: `[C]<img>${base2}</img>\n`,
         });
       } else {
         await ThermalPrinterModule.getBluetoothDeviceList();
@@ -55,7 +96,11 @@ const MainPrinterInformation = ({setNewPrinter}) => {
       if (element?.ipAddress) {
         await ThermalPrinterModule.printTcp({
           ip: element?.ipAddress,
-          payload: `[C]<img>${base}</img>\n`,
+          payload: `[C]<img>${base2}</img>\n`,
+        });
+        await ThermalPrinterModule.printTcp({
+          ip: element?.ipAddress,
+          payload: `[C]<img>${base2}</img>\n`,
         });
       } else {
         await ThermalPrinterModule.getBluetoothDeviceList();
@@ -68,10 +113,14 @@ const MainPrinterInformation = ({setNewPrinter}) => {
     });
     printers?.forEach(async element => {
       if (element?.ipAddress) {
-        await ThermalPrinterModule.printTcp({
-          ip: element?.ipAddress,
-          payload: `[C]<img>${base}</img>\n`,
-        });
+        // await ThermalPrinterModule.printTcp({
+        //   ip: element?.ipAddress,
+        //   payload: `[C]<img>${base}</img>\n`,
+        // });
+        // await ThermalPrinterModule.printTcp({
+        //   ip: element?.ipAddress,
+        //   payload: `[C]<img>${base2}</img>\n`,
+        // });
       } else {
         await ThermalPrinterModule.getBluetoothDeviceList();
         await ThermalPrinterModule.printBluetooth({
@@ -109,8 +158,16 @@ const MainPrinterInformation = ({setNewPrinter}) => {
         {mainPrinter &&
           mainPrinter?.map((ele, i) => <PrinterInfo key={i} printer={ele} />)}
 
+        <ViewShot
+          ref={viewShotRef}
+          options={{format: 'png', quality: 0.9}}
+          style={styles.hidden}>
+          {/* React Native components you want to capture */}
+          <Invoice />
+        </ViewShot>
+
         <View style={styles.contentCotainer}>
-          <Button title="Test All Main Printer" onPress={printSimpleReceipt} />
+          <Button title="Test All Main Printer" onPress={onCapture} />
           <Text style={styles.errorText} />
         </View>
         <View style={styles.button}>
@@ -146,6 +203,11 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#fcf9f9',
     width: '100%',
+  },
+  hidden: {
+    position: 'absolute',
+    left: -10000, // Move the off-screen to ensure it doesn't interfere with the layout
+    backgroundColor: 'white',
   },
 });
 

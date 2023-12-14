@@ -1,13 +1,11 @@
-package com.nardprinter;
+package com.nardprinter.Bitmap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.webkit.WebView;
 
-import com.izettle.html2bitmap.Html2Bitmap;
-import com.izettle.html2bitmap.Html2BitmapConfigurator;
-import com.izettle.html2bitmap.content.WebViewContent;
+import com.nardprinter.Bitmap.content.WebViewContent;
 
 import java.lang.ref.WeakReference;
 
