@@ -11,12 +11,11 @@ import {Button} from '../components/Button';
 import {useSelector} from 'react-redux';
 import ThermalPrinterModule from '../components/ThermalPrinterModule';
 import {useNavigation} from '@react-navigation/native';
-import {base, base2} from '../components/MyWebView/htmlContant';
+import {base, base2, html} from '../components/MyWebView/htmlContant';
 import ViewShot from 'react-native-view-shot';
-import Invoice from '../components/Invoice/Invoice';
+import WebView from 'react-native-webview';
 const MainPrinterInformation = ({setNewPrinter}) => {
   const [printing, setPrinting] = useState(false);
-  const [isCaptured, setCaptured] = useState(false);
 
   const viewShotRef = useRef(null);
 
@@ -28,25 +27,20 @@ const MainPrinterInformation = ({setNewPrinter}) => {
     if (viewShotRef.current) {
       viewShotRef.current.capture().then(uri => {
         console.log('Image captured', uri);
-        setCaptured(true);
 
         mainPrinter?.forEach(async element => {
           if (element?.ipAddress) {
-            // await ThermalPrinterModule.printTcp({
-            //   ip: element?.ipAddress,
-            //   payload: `[C]<img>${uri}</img>\n`,
-            // });
             await ThermalPrinterModule.printTcp({
               ip: element?.ipAddress,
-              payload: `[C]<img>${uri}</img>\n` + `[C]<img>${uri}</img>\n`,
+              payload: `[C]<img>${uri}</img>\n`,
             });
           } else {
             await ThermalPrinterModule.getBluetoothDeviceList();
             await ThermalPrinterModule.printBluetooth({
               payload: `[C]<img>${uri}</img>\n`,
-
               macAddress: element.macAddress,
             });
+            // await ThermalPrinterModu
           }
         });
       });
@@ -160,10 +154,13 @@ const MainPrinterInformation = ({setNewPrinter}) => {
 
         <ViewShot
           ref={viewShotRef}
-          options={{format: 'png', quality: 0.9}}
+          options={{format: 'png', quality: 1}}
           style={styles.hidden}>
           {/* React Native components you want to capture */}
-          <Invoice />
+          <WebView
+            source={{html: html}}
+            style={{width: 340, padding: 0, margin: 0}}
+          />
         </ViewShot>
 
         <View style={styles.contentCotainer}>
@@ -207,7 +204,8 @@ const styles = StyleSheet.create({
   hidden: {
     position: 'absolute',
     left: -10000, // Move the off-screen to ensure it doesn't interfere with the layout
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
+    height: '100%',
   },
 });
 

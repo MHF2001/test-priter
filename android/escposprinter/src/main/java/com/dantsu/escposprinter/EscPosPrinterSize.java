@@ -88,25 +88,25 @@ public abstract class EscPosPrinterSize {
     public byte[] bitmapToBytes(Bitmap bitmap, boolean gradient) {
         gradient = true;
         boolean isSizeEdit = false;
-//        int bitmapWidth = bitmap.getWidth(),
-//                bitmapHeight = bitmap.getHeight(),
-//                maxWidth = bitmapWidth,
-//                maxHeight = bitmapHeight;
-//
-//        if (bitmapWidth > maxWidth) {
-//            bitmapHeight = Math.round(((float) bitmapHeight) * ((float) maxWidth) / ((float) bitmapWidth));
-//            bitmapWidth = maxWidth;
-//            isSizeEdit = true;
-//        }
-//        if (bitmapHeight > maxHeight) {
-//            bitmapWidth = Math.round(((float) bitmapWidth) * ((float) maxHeight) / ((float) bitmapHeight));
-//            bitmapHeight = maxHeight;
-//            isSizeEdit = true;
-//        }
-//        bitmap = Bitmap.createScaledBitmap(bitmap, bitmapWidth, bitmapHeight, true);
-//        if (isSizeEdit) {
-//
-//        }
+       int bitmapWidth = bitmap.getWidth(),
+               bitmapHeight = bitmap.getHeight(),
+               maxWidth = bitmapWidth,
+               maxHeight = bitmapHeight;
+
+       if (bitmapWidth > maxWidth) {
+           bitmapHeight = Math.round(((float) bitmapHeight) * ((float) maxWidth) / ((float) bitmapWidth));
+           bitmapWidth = maxWidth;
+           isSizeEdit = true;
+       }
+       if (bitmapHeight > maxHeight) {
+           bitmapWidth = Math.round(((float) bitmapWidth) * ((float) maxHeight) / ((float) bitmapHeight));
+           bitmapHeight = maxHeight;
+           isSizeEdit = true;
+       }
+       bitmap = Bitmap.createScaledBitmap(bitmap, bitmapWidth, bitmapHeight, true);
+       if (isSizeEdit) {
+
+       }
 
         return EscPosPrinterCommands.bitmapToBytes(bitmap, gradient);
     }
