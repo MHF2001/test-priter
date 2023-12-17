@@ -155,7 +155,7 @@ TcpConnection connection = new TcpConnection(ipAddress, (int) port, (int) timeou
       ActivityCompat.requestPermissions(getCurrentActivity(), new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
     } else {
       try {
-        this.printIt(btPrinter.connect(), payload, autoCut, openCashbox, mmFeedPaper, printerDpi, printerWidthMM, printerNbrCharactersPerLine);
+        this.printIt2(btPrinter.connect(), payload, autoCut, openCashbox, mmFeedPaper, printerDpi, printerWidthMM, printerNbrCharactersPerLine);
       } catch (Exception e) {
         this.jsPromise.reject("Connection Error", e.getMessage());
       }
@@ -253,6 +253,44 @@ TcpConnection connection = new TcpConnection(ipAddress, (int) port, (int) timeou
       this.jsPromise.resolve(true);
     } catch (EscPosConnectionException e) {
 //      this.jsPromise.reject("Broken connection", e.getMessage());
+      Log.d("ERROR", "printIt: Broken connection " + e.getMessage());
+
+    } catch (EscPosParserException e) {
+//      this.jsPromise.reject("Invalid formatted text", e.getMessage());
+      Log.d("ERROR", "Invalid formatted text " + e.getMessage());
+
+    } catch (EscPosEncodingException e) {
+//      this.jsPromise.reject("Bad selected encoding", e.getMessage());
+      Log.d("ERROR", "Bad selected encoding " + e.getMessage());
+
+    } catch (EscPosBarcodeException e) {
+      Log.d("ERROR", "Invalid barcode " + e.getMessage());
+
+//      this.jsPromise.reject("Invalid barcode", e.getMessage());
+    } catch (Exception e) {
+//      this.jsPromise.reject("ERROR", e.getMessage());
+      Log.d("ERROR", "printIt: Error " + e.getMessage());
+    }
+  }
+
+  public void printIt2( DeviceConnection printerConnection,String payload, boolean autoCut, boolean openCashbox, double mmFeedPaper, double printerDpi, double printerWidthMM, double printerNbrCharactersPerLine) {
+    EscPosPrinter printer = null;
+    try {     printer = new EscPosPrinter(printerConnection, (int) printerDpi, (float) printerWidthMM, (int) printerNbrCharactersPerLine);
+
+      Log.d(TAG, "printIt: "+printer);
+      String processedPayload = preprocessImgTag(printer, payload);
+      if (openCashbox) {
+        printer.printFormattedTextAndOpenCashBox(processedPayload, (float) mmFeedPaper);
+      } else if (autoCut) {
+        printer.printFormattedTextAndCut(processedPayload, (float) mmFeedPaper);
+      } else {
+        printer.printFormattedText(processedPayload, (float) mmFeedPaper);
+      }
+//      printer.disconnectPrinter();
+      this.jsPromise.resolve(true);
+    } catch (EscPosConnectionException e) {
+//      this.jsPromise.reject("Broken connection", e.getMessage());
+      printer.disconnectPrinter();
       Log.d("ERROR", "printIt: Broken connection " + e.getMessage());
 
     } catch (EscPosParserException e) {

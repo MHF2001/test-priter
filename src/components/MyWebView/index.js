@@ -7,6 +7,7 @@ import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {WEBSITE_URL} from '../../Env';
 import ViewShot, {captureRef} from 'react-native-view-shot';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /*
    What we we should do The forntend to send the data from URL to the app and the base46
@@ -57,7 +58,7 @@ const CaptureHtmlToBitmap = () => {
     setWebViewLoaded(true);
   };
 
-  const onMessage = async event => {
+  const onMessage = event => {
     const data = event.nativeEvent.data;
 
     const parseData = JSON.parse(data);
@@ -65,25 +66,46 @@ const CaptureHtmlToBitmap = () => {
     if (parseData.isPrinterSetting) {
       navigation.navigate('TopNavigation');
     } else {
-      setTimeout(async () => {
+      setTimeout(() => {
         if (viewShotRef.current && contentHeight > 0) {
           viewShotRef.current.capture().then(uri => {
+            printers?.forEach(async p => {
+              if (p.printer === 'Printer 1') {
+                if (p?.ipAddress) {
+                  await ThermalPrinterModule.printTcp({
+                    ip: p?.ipAddress,
+                    payload: `[C]<img>${uri}</img>\n`,
+                    mmFeedPaper: 20,
+                  });
+                } else {
+                  await ThermalPrinterModule.getBluetoothDeviceList();
+                  await ThermalPrinterModule.printBluetooth({
+                    payload: `[C]<img>${uri}</img>\n \n \n\n\n\n \n`,
+                    macAddress: p.macAddress,
+                    mmFeedPaper: 50,
+                  });
+                }
+              }
+            });
             mainPrinter?.forEach(async element => {
               if (element?.ipAddress) {
                 await ThermalPrinterModule.printTcp({
                   ip: element?.ipAddress,
                   payload: `[C]<img>${uri}</img>\n`,
+                  mmFeedPaper: 20,
                 });
               } else {
                 await ThermalPrinterModule.getBluetoothDeviceList();
                 await ThermalPrinterModule.printBluetooth({
                   payload: `[C]<img>${uri}</img>\n`,
                   macAddress: element.macAddress,
+                  mmFeedPaper: 20,
                 });
               }
             });
-            setHtml('');
+
             setContentHeight(0);
+            setHtml('');
           });
         }
       }, 1000);
@@ -94,9 +116,6 @@ const CaptureHtmlToBitmap = () => {
     try {
       const messageData = JSON.parse(event.nativeEvent.data);
       if (messageData.type === 'height') {
-        console.log('====================================');
-        console.log(messageData.height);
-        console.log('====================================');
         setContentHeight(messageData.height); // Set the content height
       }
     } catch (error) {
@@ -123,7 +142,7 @@ const CaptureHtmlToBitmap = () => {
         }}
       />
       <ViewShot
-        options={{format: 'png', quality: 0.9}}
+        options={{format: 'png', result: 'data-uri', quality: 0.9}}
         ref={viewShotRef}
         style={styles.hidden}>
         <WebView
@@ -131,7 +150,12 @@ const CaptureHtmlToBitmap = () => {
           injectedJavaScript={injectedJavaScript}
           onMessage={onMessageHeigh}
           scalesPageToFit={true}
-          style={{width: 340, padding: 0, margin: 0, height: contentHeight}}
+          style={{
+            width: 340,
+            padding: 0,
+            margin: 0,
+            height: contentHeight + 10,
+          }}
         />
       </ViewShot>
     </>
